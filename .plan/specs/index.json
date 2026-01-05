@@ -1,0 +1,16 @@
+{
+  "lastSequence": 1,
+  "specs": [
+    {
+      "id": "spec-001",
+      "title": "Product Requirements Document (PRD) - p v1",
+      "filename": "spec-001-p-prd-v1.md",
+      "source": "clipboard",
+      "importedAt": "2026-01-04T19:30:00Z",
+      "extractedItems": {
+        "epics": 5,
+        "stories": 8
+      }
+    }
+  ]
+}

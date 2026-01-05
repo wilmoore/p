@@ -1,0 +1,13 @@
+{
+  "lastSequence": 3,
+  "entries": [
+    {
+      "branch": "mvp/p",
+      "adrs": [
+        "001-use-cdpath-for-discovery.md",
+        "002-zero-config-tmux-execution.md",
+        "003-collision-free-session-naming.md"
+      ]
+    }
+  ]
+}
