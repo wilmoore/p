@@ -14,9 +14,8 @@
       "sourceSpec": "spec-001",
       "sourceBranch": "mvp/p",
       "createdAt": "2026-01-04T19:30:00Z",
-      "status": "in-progress",
-      "mvpBatch": true,
-      "mvpBatchStartedAt": "2026-01-04T19:35:00Z"
+      "status": "resolved",
+      "resolvedAt": "2026-01-04T19:40:00Z"
     },
     {
       "id": 2,
@@ -31,9 +30,8 @@
       "sourceSpec": "spec-001",
       "sourceBranch": "mvp/p",
       "createdAt": "2026-01-04T19:30:00Z",
-      "status": "in-progress",
-      "mvpBatch": true,
-      "mvpBatchStartedAt": "2026-01-04T19:35:00Z"
+      "status": "resolved",
+      "resolvedAt": "2026-01-04T19:40:00Z"
     },
     {
       "id": 3,
@@ -48,9 +46,8 @@
       "sourceSpec": "spec-001",
       "sourceBranch": "mvp/p",
       "createdAt": "2026-01-04T19:30:00Z",
-      "status": "in-progress",
-      "mvpBatch": true,
-      "mvpBatchStartedAt": "2026-01-04T19:35:00Z"
+      "status": "resolved",
+      "resolvedAt": "2026-01-04T19:40:00Z"
     },
     {
       "id": 4,
@@ -65,9 +62,8 @@
       "sourceSpec": "spec-001",
       "sourceBranch": "mvp/p",
       "createdAt": "2026-01-04T19:30:00Z",
-      "status": "in-progress",
-      "mvpBatch": true,
-      "mvpBatchStartedAt": "2026-01-04T19:35:00Z"
+      "status": "resolved",
+      "resolvedAt": "2026-01-04T19:40:00Z"
     },
     {
       "id": 5,
@@ -97,10 +93,9 @@
       "sourceSpec": "spec-001",
       "sourceBranch": "mvp/p",
       "createdAt": "2026-01-04T19:30:00Z",
-      "status": "in-progress",
-      "parentEpic": 1,
-      "mvpBatch": true,
-      "mvpBatchStartedAt": "2026-01-04T19:35:00Z"
+      "status": "resolved",
+      "resolvedAt": "2026-01-04T19:40:00Z",
+      "parentEpic": 1
     },
     {
       "id": 7,
@@ -115,10 +110,9 @@
       "sourceSpec": "spec-001",
       "sourceBranch": "mvp/p",
       "createdAt": "2026-01-04T19:30:00Z",
-      "status": "in-progress",
-      "parentEpic": 1,
-      "mvpBatch": true,
-      "mvpBatchStartedAt": "2026-01-04T19:35:00Z"
+      "status": "resolved",
+      "resolvedAt": "2026-01-04T19:40:00Z",
+      "parentEpic": 1
     },
     {
       "id": 8,
@@ -133,10 +127,9 @@
       "sourceSpec": "spec-001",
       "sourceBranch": "mvp/p",
       "createdAt": "2026-01-04T19:30:00Z",
-      "status": "in-progress",
-      "parentEpic": 2,
-      "mvpBatch": true,
-      "mvpBatchStartedAt": "2026-01-04T19:35:00Z"
+      "status": "resolved",
+      "resolvedAt": "2026-01-04T19:40:00Z",
+      "parentEpic": 2
     },
     {
       "id": 9,
@@ -151,10 +144,9 @@
       "sourceSpec": "spec-001",
       "sourceBranch": "mvp/p",
       "createdAt": "2026-01-04T19:30:00Z",
-      "status": "in-progress",
-      "parentEpic": 2,
-      "mvpBatch": true,
-      "mvpBatchStartedAt": "2026-01-04T19:35:00Z"
+      "status": "resolved",
+      "resolvedAt": "2026-01-04T19:40:00Z",
+      "parentEpic": 2
     },
     {
       "id": 10,
@@ -169,10 +161,9 @@
       "sourceSpec": "spec-001",
       "sourceBranch": "mvp/p",
       "createdAt": "2026-01-04T19:30:00Z",
-      "status": "in-progress",
-      "parentEpic": 3,
-      "mvpBatch": true,
-      "mvpBatchStartedAt": "2026-01-04T19:35:00Z"
+      "status": "resolved",
+      "resolvedAt": "2026-01-04T19:40:00Z",
+      "parentEpic": 3
     },
     {
       "id": 11,
@@ -187,10 +178,9 @@
       "sourceSpec": "spec-001",
       "sourceBranch": "mvp/p",
       "createdAt": "2026-01-04T19:30:00Z",
-      "status": "in-progress",
-      "parentEpic": 3,
-      "mvpBatch": true,
-      "mvpBatchStartedAt": "2026-01-04T19:35:00Z"
+      "status": "resolved",
+      "resolvedAt": "2026-01-04T19:40:00Z",
+      "parentEpic": 3
     },
     {
       "id": 12,
@@ -205,10 +195,9 @@
       "sourceSpec": "spec-001",
       "sourceBranch": "mvp/p",
       "createdAt": "2026-01-04T19:30:00Z",
-      "status": "in-progress",
-      "parentEpic": 4,
-      "mvpBatch": true,
-      "mvpBatchStartedAt": "2026-01-04T19:35:00Z"
+      "status": "resolved",
+      "resolvedAt": "2026-01-04T19:40:00Z",
+      "parentEpic": 4
     },
     {
       "id": 13,
