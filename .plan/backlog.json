@@ -1,5 +1,5 @@
 {
-  "lastSequence": 13,
+  "lastSequence": 14,
   "items": [
     {
       "id": 1,
@@ -214,6 +214,18 @@
       "createdAt": "2026-01-04T19:30:00Z",
       "status": "open",
       "parentEpic": 5
+    },
+    {
+      "id": 14,
+      "title": "Default window name and status bar styling",
+      "description": "When a tmux session is started, configure sensible defaults:\n\n1. Name the first window 'home' (or similar generic name)\n2. Show the current git branch in the status bar\n3. Style the status bar to look nice by default - it's the main aesthetic element in tmux\n4. Use color-scheme-agnostic colors that look good on any terminal theme (light or dark)\n\nConstraints:\n- Keep it minimal, don't go overboard\n- Must work universally without user configuration\n- No color scheme switching or customization needed",
+      "category": "feature",
+      "severity": "medium",
+      "fingerprint": "manual|14|default-window-name-and-status-bar-styling",
+      "source": "manual",
+      "sourceBranch": "main",
+      "createdAt": "2026-01-05T07:30:00Z",
+      "status": "open"
     }
   ]
 }
