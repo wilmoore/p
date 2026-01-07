@@ -76,9 +76,10 @@
       "fingerprint": "spec|spec-001|epic|e005-drill-down",
       "source": "/pro:spec.import",
       "sourceSpec": "spec-001",
-      "sourceBranch": null,
+      "sourceBranch": "feat/drill-down-and-status-bar",
       "createdAt": "2026-01-04T19:30:00Z",
-      "status": "open"
+      "status": "resolved",
+      "resolvedAt": "2026-01-07T00:00:00Z"
     },
     {
       "id": 6,
@@ -210,9 +211,10 @@
       "fingerprint": "spec|spec-001|story|us008-drill-down",
       "source": "/pro:spec.import",
       "sourceSpec": "spec-001",
-      "sourceBranch": null,
+      "sourceBranch": "feat/drill-down-and-status-bar",
       "createdAt": "2026-01-04T19:30:00Z",
-      "status": "open",
+      "status": "resolved",
+      "resolvedAt": "2026-01-07T00:00:00Z",
       "parentEpic": 5
     },
     {
@@ -223,9 +225,9 @@
       "severity": "medium",
       "fingerprint": "manual|14|default-window-name-and-status-bar-styling",
       "source": "manual",
-      "sourceBranch": "main",
+      "sourceBranch": "feat/drill-down-and-status-bar",
       "createdAt": "2026-01-05T07:30:00Z",
-      "status": "open"
+      "status": "in-progress"
     }
   ]
 }
