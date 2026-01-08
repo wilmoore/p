@@ -42,6 +42,8 @@ func createSession(dir *Directory) error {
 		if err := runTmux("new-session", "-d", "-s", sessionName, "-c", dir.Path); err != nil {
 			return err
 		}
+		// Name the first window 'home'
+		_ = runTmux("rename-window", "-t", sessionName+":0", "home")
 		// Inject minimal config
 		_ = InjectConfig()
 		return execTmux("switch-client", "-t", sessionName)
@@ -52,6 +54,8 @@ func createSession(dir *Directory) error {
 	if err := runTmux("new-session", "-d", "-s", sessionName, "-c", dir.Path); err != nil {
 		return err
 	}
+	// Name the first window 'home'
+	_ = runTmux("rename-window", "-t", sessionName+":0", "home")
 	// Inject minimal config
 	_ = InjectConfig()
 	// Now attach

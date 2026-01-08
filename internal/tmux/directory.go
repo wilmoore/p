@@ -8,8 +8,9 @@ import (
 
 // Directory represents a project directory discovered via CDPATH.
 type Directory struct {
-	Name string
-	Path string
+	Name       string
+	Path       string
+	HasSubdirs bool // True if directory contains subdirectories
 }
 
 // DiscoverDirectories finds all directories in the CDPATH locations.
@@ -54,11 +55,56 @@ func DiscoverDirectories(cdpath string) ([]Directory, error) {
 
 			fullPath := filepath.Join(basePath, entry.Name())
 			dirs = append(dirs, Directory{
-				Name: entry.Name(),
-				Path: fullPath,
+				Name:       entry.Name(),
+				Path:       fullPath,
+				HasSubdirs: hasSubdirectories(fullPath),
 			})
 		}
 	}
 
 	return dirs, nil
+}
+
+// hasSubdirectories checks if a directory contains any non-hidden subdirectories.
+func hasSubdirectories(path string) bool {
+	entries, err := os.ReadDir(path)
+	if err != nil {
+		return false
+	}
+
+	for _, entry := range entries {
+		if entry.IsDir() && !strings.HasPrefix(entry.Name(), ".") {
+			return true
+		}
+	}
+	return false
+}
+
+// GetSubdirectories returns the immediate subdirectories of a given directory.
+// Used for drill-down navigation.
+func GetSubdirectories(dir *Directory) ([]Directory, error) {
+	entries, err := os.ReadDir(dir.Path)
+	if err != nil {
+		return nil, err
+	}
+
+	var subdirs []Directory
+	for _, entry := range entries {
+		if !entry.IsDir() {
+			continue
+		}
+		// Skip hidden directories
+		if strings.HasPrefix(entry.Name(), ".") {
+			continue
+		}
+
+		fullPath := filepath.Join(dir.Path, entry.Name())
+		subdirs = append(subdirs, Directory{
+			Name:       entry.Name(),
+			Path:       fullPath,
+			HasSubdirs: hasSubdirectories(fullPath),
+		})
+	}
+
+	return subdirs, nil
 }
