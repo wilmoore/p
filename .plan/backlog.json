@@ -227,7 +227,8 @@
       "source": "manual",
       "sourceBranch": "feat/drill-down-and-status-bar",
       "createdAt": "2026-01-05T07:30:00Z",
-      "status": "in-progress"
+      "status": "resolved",
+      "resolvedAt": "2026-01-07T00:00:00Z"
     }
   ]
 }
