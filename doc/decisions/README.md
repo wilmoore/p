@@ -21,3 +21,5 @@ We use the [Michael Nygard format](https://cognitect.com/blog/2011/11/15/documen
 - [001. Use CDPATH as sole discovery mechanism](001-use-cdpath-for-discovery.md)
 - [002. Zero-configuration tmux execution](002-zero-config-tmux-execution.md)
 - [003. Collision-free session naming with hash suffix](003-collision-free-session-naming.md)
+- [004. Stack-based drill-down navigation](004-stack-based-drill-down-navigation.md)
+- [005. Color-agnostic status bar styling](005-color-agnostic-status-bar.md)

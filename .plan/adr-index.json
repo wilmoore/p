@@ -1,5 +1,5 @@
 {
-  "lastSequence": 3,
+  "lastSequence": 5,
   "entries": [
     {
       "branch": "mvp/p",
@@ -7,6 +7,13 @@
         "001-use-cdpath-for-discovery.md",
         "002-zero-config-tmux-execution.md",
         "003-collision-free-session-naming.md"
+      ]
+    },
+    {
+      "branch": "feat/drill-down-and-status-bar",
+      "adrs": [
+        "004-stack-based-drill-down-navigation.md",
+        "005-color-agnostic-status-bar.md"
       ]
     }
   ]
