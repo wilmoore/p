@@ -1,5 +1,5 @@
 {
-  "lastSequence": 14,
+  "lastSequence": 19,
   "items": [
     {
       "id": 1,
@@ -229,6 +229,70 @@
       "createdAt": "2026-01-05T07:30:00Z",
       "status": "resolved",
       "resolvedAt": "2026-01-07T00:00:00Z"
+    },
+    {
+      "id": 15,
+      "title": "Add UI package tests",
+      "description": "Add unit tests for internal/ui/selector.go.\n\nCurrent coverage: 0%\n\nThe ShowSelector function contains complex logic:\n- Navigation stack management\n- User input parsing\n- Drill-down state machine\n\nApproach:\n- Mock stdin for user input scenarios\n- Test session selection flow\n- Test directory selection flow\n- Test drill-down navigation\n- Test back navigation (..) handling\n- Test invalid input handling",
+      "category": "tests",
+      "severity": "medium",
+      "phase": "should",
+      "fingerprint": "audit|quality|missing-tests|ui",
+      "source": "/pro:audit",
+      "sourceBranch": "main",
+      "createdAt": "2026-01-08T21:51:44Z",
+      "status": "open"
+    },
+    {
+      "id": 16,
+      "title": "Add integration tests",
+      "description": "Add integration tests to verify the full workflow.\n\nCurrently untested workflows:\n- Session listing + selection\n- Directory discovery + session creation\n- Drill-down navigation flow\n- tmux config injection\n\nApproach:\n- Use a test tmux server (or mock tmux commands)\n- Create temporary CDPATH directories\n- Verify end-to-end behavior",
+      "category": "tests",
+      "severity": "medium",
+      "phase": "should",
+      "fingerprint": "audit|quality|missing-integration-tests",
+      "source": "/pro:audit",
+      "sourceBranch": "main",
+      "createdAt": "2026-01-08T21:51:44Z",
+      "status": "open"
+    },
+    {
+      "id": 17,
+      "title": "Add main package tests",
+      "description": "Add unit tests for main.go.\n\nCurrent coverage: 0%\n\nThe run() function contains CDPATH validation logic that should be tested:\n- Empty CDPATH error message\n- Error formatting\n\nApproach:\n- Test CDPATH validation error message content\n- Test error propagation from sub-packages",
+      "category": "tests",
+      "severity": "low",
+      "phase": "could",
+      "fingerprint": "audit|quality|missing-tests|main",
+      "source": "/pro:audit",
+      "sourceBranch": "main",
+      "createdAt": "2026-01-08T21:51:44Z",
+      "status": "open"
+    },
+    {
+      "id": 18,
+      "title": "Add E2E tests",
+      "description": "Add end-to-end tests validating complete binary behavior.\n\nApproach:\n- Use expect-like tool or pty simulation\n- Test actual binary invocation\n- Verify user-facing output\n- Test interactive selection flow",
+      "category": "tests",
+      "severity": "low",
+      "phase": "could",
+      "fingerprint": "audit|quality|missing-e2e-tests",
+      "source": "/pro:audit",
+      "sourceBranch": "main",
+      "createdAt": "2026-01-08T21:51:44Z",
+      "status": "open"
+    },
+    {
+      "id": 19,
+      "title": "README, LICENSE, and module path fixes",
+      "description": "Chore to commit and PR:\n\n1. Beautified README with badges, features section, installation, usage examples\n2. Added MIT LICENSE file\n3. Fixed module path from wilmooreiii to wilmoore across go.mod, main.go, and internal/ui/selector.go",
+      "category": "chore",
+      "severity": "medium",
+      "fingerprint": "chore|19|readme-license-module-path",
+      "source": "/pro:chore",
+      "sourceBranch": "chore/readme-license-module-path",
+      "createdAt": "2026-01-09T20:37:25Z",
+      "status": "in-progress"
     }
   ]
 }
