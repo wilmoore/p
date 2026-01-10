@@ -292,7 +292,8 @@
       "source": "/pro:chore",
       "sourceBranch": "chore/readme-license-module-path",
       "createdAt": "2026-01-09T20:37:25Z",
-      "status": "in-progress"
+      "status": "resolved",
+      "resolvedAt": "2026-01-09T20:45:00Z"
     }
   ]
 }
