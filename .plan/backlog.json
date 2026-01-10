@@ -1,5 +1,5 @@
 {
-  "lastSequence": 19,
+  "lastSequence": 20,
   "items": [
     {
       "id": 1,
@@ -294,6 +294,19 @@
       "createdAt": "2026-01-09T20:37:25Z",
       "status": "resolved",
       "resolvedAt": "2026-01-09T20:45:00Z"
+    },
+    {
+      "id": 20,
+      "title": "go install @latest fails - no semver tag",
+      "description": "Bug: `go install github.com/wilmoore/p@latest` fails silently and `which p` returns 'not found'.\n\nSteps to Reproduce:\n1. Run: go install github.com/wilmoore/p@latest\n2. Run: which p\n3. Observe: p not found\n\nRoot Cause:\nNo semantic version tags exist on the repository. Go's module system requires at least one vX.Y.Z tag for @latest resolution.\n\nExpected: Binary installed and available in PATH\nActual: go install appears to succeed but module not indexed on pkg.go.dev\n\nFix: Create v0.1.0 tag and push to GitHub",
+      "category": "bug",
+      "severity": "critical",
+      "fingerprint": "bug|20|go-install-requires-semver-tag",
+      "source": "/pro:bug",
+      "sourceBranch": "fix/go-install-requires-semver-tag",
+      "createdAt": "2026-01-10T06:15:00Z",
+      "status": "resolved",
+      "resolvedAt": "2026-01-10T08:20:00Z"
     }
   ]
 }
