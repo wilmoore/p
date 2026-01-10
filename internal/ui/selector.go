@@ -8,7 +8,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/wilmooreiii/p/internal/tmux"
+	"github.com/wilmoore/p/internal/tmux"
 )
 
 // item represents a selectable item in the UI.

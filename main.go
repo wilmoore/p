@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/wilmooreiii/p/internal/tmux"
-	"github.com/wilmooreiii/p/internal/ui"
+	"github.com/wilmoore/p/internal/tmux"
+	"github.com/wilmoore/p/internal/ui"
 )
 
 func main() {
