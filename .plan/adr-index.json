@@ -1,5 +1,5 @@
 {
-  "lastSequence": 5,
+  "lastSequence": 6,
   "entries": [
     {
       "branch": "mvp/p",
@@ -14,6 +14,12 @@
       "adrs": [
         "004-stack-based-drill-down-navigation.md",
         "005-color-agnostic-status-bar.md"
+      ]
+    },
+    {
+      "branch": "feat/tmux-first-window-named-home",
+      "adrs": [
+        "006-simplify-to-session-only.md"
       ]
     }
   ]
