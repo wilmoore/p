@@ -1,202 +1,144 @@
 package ui
 
 import (
-	"bufio"
 	"fmt"
 	"os"
-	"path/filepath"
 	"strconv"
 	"strings"
 
 	"github.com/wilmoore/p/internal/tmux"
+	"golang.org/x/term"
 )
 
-// item represents a selectable item in the UI.
-type item struct {
-	label     string
-	isSession bool
-	session   *tmux.Session
-	directory *tmux.Directory
-}
+// ShowSelector displays an fzf-like session selector.
+// Supports both numeric selection and text filtering.
+func ShowSelector(sessions []tmux.Session) (*tmux.Session, error) {
+	if len(sessions) == 0 {
+		return nil, fmt.Errorf("no sessions available")
+	}
 
-// ShowSelector displays the session/directory selector and returns the user's choice.
-// Supports drill-down navigation into subdirectories.
-func ShowSelector(sessions []tmux.Session, dirs []tmux.Directory) (tmux.Choice, error) {
-	// Navigation stack to track drill-down path
-	var navStack []*tmux.Directory
+	// Put terminal in raw mode
+	oldState, err := term.MakeRaw(int(os.Stdin.Fd()))
+	if err != nil {
+		return nil, fmt.Errorf("failed to set raw mode: %w", err)
+	}
+	defer term.Restore(int(os.Stdin.Fd()), oldState)
 
-	// Current directories being displayed
-	currentDirs := dirs
+	var query string
+	selected := 0
 
 	for {
-		fmt.Println()
+		// Filter sessions based on query
+		filtered := filterSessions(sessions, query)
 
-		// Build combined list for selection
-		var items []item
-
-		// Show navigation context if we're drilled down
-		if len(navStack) > 0 {
-			current := navStack[len(navStack)-1]
-			fmt.Printf("%s/\n\n", current.Name)
+		// Clamp selection
+		if selected >= len(filtered) {
+			selected = len(filtered) - 1
+		}
+		if selected < 0 {
+			selected = 0
 		}
 
-		// Only show sessions at top level
-		if len(navStack) == 0 && len(sessions) > 0 {
-			fmt.Println("Sessions:")
-			for i := range sessions {
-				idx := len(items) + 1
-				fmt.Printf("  [%d] %s\n", idx, sessions[i].Name)
-				items = append(items, item{
-					label:     sessions[i].Name,
-					isSession: true,
-					session:   &sessions[i],
-				})
-			}
-			fmt.Println()
-		}
+		// Render
+		render(filtered, query, selected)
 
-		// Add directories (or subdirectories if drilled down)
-		if len(currentDirs) > 0 {
-			if len(navStack) == 0 {
-				fmt.Println("Projects:")
-			}
-			for i := range currentDirs {
-				idx := len(items) + 1
-				indicator := ""
-				if currentDirs[i].HasSubdirs {
-					indicator = " >"
-				}
-				fmt.Printf("  [%d] %s%s\n", idx, currentDirs[i].Name, indicator)
-				items = append(items, item{
-					label:     currentDirs[i].Name,
-					directory: &currentDirs[i],
-				})
-			}
-			fmt.Println()
-		}
-
-		// Show back option if drilled down
-		if len(navStack) > 0 {
-			fmt.Println("  [..] up")
-			fmt.Println()
-		}
-
-		if len(items) == 0 && len(navStack) == 0 {
-			return tmux.Choice{}, fmt.Errorf("no sessions or projects available")
-		}
-
-		// Read user selection
-		fmt.Print("> ")
-		reader := bufio.NewReader(os.Stdin)
-		input, err := reader.ReadString('\n')
+		// Read keypress
+		b := make([]byte, 3)
+		n, err := os.Stdin.Read(b)
 		if err != nil {
-			return tmux.Choice{}, fmt.Errorf("failed to read input: %w", err)
+			return nil, fmt.Errorf("failed to read input: %w", err)
 		}
 
-		input = strings.TrimSpace(input)
-		if input == "" {
-			return tmux.Choice{}, fmt.Errorf("no selection made")
-		}
+		// Handle input
+		switch {
+		case n == 1 && b[0] == 3: // Ctrl+C
+			clearScreen()
+			return nil, fmt.Errorf("cancelled")
 
-		// Handle back navigation
-		if input == ".." {
-			if len(navStack) > 0 {
-				navStack = navStack[:len(navStack)-1]
-				if len(navStack) > 0 {
-					// Get subdirs of parent
-					parent := navStack[len(navStack)-1]
-					currentDirs, _ = tmux.GetSubdirectories(parent)
-				} else {
-					// Back to top level
-					currentDirs = dirs
+		case n == 1 && b[0] == 27: // Escape
+			clearScreen()
+			return nil, fmt.Errorf("cancelled")
+
+		case n == 1 && b[0] == 13: // Enter
+			if len(filtered) > 0 {
+				clearScreen()
+				return &filtered[selected], nil
+			}
+
+		case n == 1 && b[0] == 127: // Backspace
+			if len(query) > 0 {
+				query = query[:len(query)-1]
+				selected = 0
+			}
+
+		case n == 3 && b[0] == 27 && b[1] == 91: // Arrow keys
+			switch b[2] {
+			case 65: // Up
+				if selected > 0 {
+					selected--
 				}
-				continue
-			}
-			// Already at top level, ignore
-			continue
-		}
-
-		// Parse selection
-		idx, err := strconv.Atoi(input)
-		if err != nil || idx < 1 || idx > len(items) {
-			fmt.Printf("Invalid selection: %s\n", input)
-			continue
-		}
-
-		selected := items[idx-1]
-
-		// If it's a session, return immediately
-		if selected.isSession {
-			return tmux.Choice{
-				IsSession: true,
-				Session:   selected.session,
-			}, nil
-		}
-
-		// It's a directory
-		dir := selected.directory
-
-		// If directory has subdirectories, offer drill-down
-		if dir.HasSubdirs {
-			action, err := promptDrillDown(dir)
-			if err != nil {
-				return tmux.Choice{}, err
-			}
-
-			switch action {
-			case "drill":
-				// Drill down into this directory
-				navStack = append(navStack, dir)
-				currentDirs, err = tmux.GetSubdirectories(dir)
-				if err != nil {
-					return tmux.Choice{}, fmt.Errorf("failed to read subdirectories: %w", err)
+			case 66: // Down
+				if selected < len(filtered)-1 {
+					selected++
 				}
-				continue
-			case "create":
-				// Create session here
-				return tmux.Choice{
-					IsSession: false,
-					Directory: dir,
-				}, nil
-			case "cancel":
-				// Go back to selection
-				continue
+			}
+
+		case n == 1 && b[0] >= 32 && b[0] < 127: // Printable character
+			query += string(b[0])
+			selected = 0
+
+			// Check if query is a valid number for direct selection
+			if idx, err := strconv.Atoi(query); err == nil {
+				if idx >= 1 && idx <= len(sessions) {
+					clearScreen()
+					return &sessions[idx-1], nil
+				}
 			}
 		}
-
-		// No subdirectories, create session directly
-		return tmux.Choice{
-			IsSession: false,
-			Directory: dir,
-		}, nil
 	}
 }
 
-// promptDrillDown asks the user whether to drill down or create a session.
-func promptDrillDown(dir *tmux.Directory) (string, error) {
-	fmt.Println()
-	fmt.Printf("%s contains subdirectories:\n\n", filepath.Base(dir.Path))
-	fmt.Println("  [d] drill down")
-	fmt.Println("  [c] create session here")
-	fmt.Println("  [q] cancel")
-	fmt.Println()
-	fmt.Print("> ")
-
-	reader := bufio.NewReader(os.Stdin)
-	input, err := reader.ReadString('\n')
-	if err != nil {
-		return "", fmt.Errorf("failed to read input: %w", err)
+// filterSessions returns sessions matching the query (case-insensitive substring).
+func filterSessions(sessions []tmux.Session, query string) []tmux.Session {
+	if query == "" {
+		return sessions
 	}
 
-	input = strings.TrimSpace(strings.ToLower(input))
-	switch input {
-	case "d", "drill":
-		return "drill", nil
-	case "c", "create":
-		return "create", nil
-	case "q", "cancel", "":
-		return "cancel", nil
-	default:
-		return "cancel", nil
+	query = strings.ToLower(query)
+	var filtered []tmux.Session
+	for _, s := range sessions {
+		if strings.Contains(strings.ToLower(s.Name), query) {
+			filtered = append(filtered, s)
+		}
 	}
+	return filtered
+}
+
+// render displays the current state.
+func render(sessions []tmux.Session, query string, selected int) {
+	// Move cursor to top-left and clear screen
+	fmt.Print("\033[H\033[J")
+
+	fmt.Println("Sessions:")
+	fmt.Println()
+
+	if len(sessions) == 0 {
+		fmt.Println("  (no matches)")
+	} else {
+		for i, s := range sessions {
+			if i == selected {
+				fmt.Printf("  \033[7m %s \033[0m\n", s.Name)
+			} else {
+				fmt.Printf("   %s\n", s.Name)
+			}
+		}
+	}
+
+	fmt.Println()
+	fmt.Printf("> %s", query)
+}
+
+// clearScreen clears the terminal screen.
+func clearScreen() {
+	fmt.Print("\033[H\033[J")
 }

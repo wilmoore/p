@@ -16,30 +16,22 @@ func main() {
 }
 
 func run() error {
-	// Check CDPATH first
-	cdpath := os.Getenv("CDPATH")
-	if cdpath == "" {
-		return fmt.Errorf("CDPATH is not set.\n\np uses CDPATH to discover project directories.\nSet CDPATH to enable directory-based projects.\n\nExiting")
-	}
-
 	// Get existing tmux sessions
 	sessions, err := tmux.ListSessions()
 	if err != nil && !tmux.IsNoServerError(err) {
 		return fmt.Errorf("failed to list tmux sessions: %w", err)
 	}
 
-	// Get directories from CDPATH
-	dirs, err := tmux.DiscoverDirectories(cdpath)
-	if err != nil {
-		return fmt.Errorf("failed to discover directories: %w", err)
+	if len(sessions) == 0 {
+		return fmt.Errorf("no tmux sessions available")
 	}
 
 	// Show selector and get user choice
-	choice, err := ui.ShowSelector(sessions, dirs)
+	choice, err := ui.ShowSelector(sessions)
 	if err != nil {
 		return err
 	}
 
-	// Execute the user's choice
-	return tmux.Execute(choice)
+	// Attach to the selected session
+	return tmux.AttachToSession(choice.Name)
 }
