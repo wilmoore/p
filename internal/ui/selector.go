@@ -115,26 +115,27 @@ func filterSessions(sessions []tmux.Session, query string) []tmux.Session {
 }
 
 // render displays the current state.
+// Note: In raw mode, \n only moves down; \r\n is needed to return to column 0.
 func render(sessions []tmux.Session, query string, selected int) {
 	// Move cursor to top-left and clear screen
 	fmt.Print("\033[H\033[J")
 
-	fmt.Println("Sessions:")
-	fmt.Println()
+	fmt.Print("Sessions:\r\n")
+	fmt.Print("\r\n")
 
 	if len(sessions) == 0 {
-		fmt.Println("  (no matches)")
+		fmt.Print("  (no matches)\r\n")
 	} else {
 		for i, s := range sessions {
 			if i == selected {
-				fmt.Printf("  \033[7m %s \033[0m\n", s.Name)
+				fmt.Printf("  \033[7m %s \033[0m\r\n", s.Name)
 			} else {
-				fmt.Printf("   %s\n", s.Name)
+				fmt.Printf("   %s\r\n", s.Name)
 			}
 		}
 	}
 
-	fmt.Println()
+	fmt.Print("\r\n")
 	fmt.Printf("> %s", query)
 }
 
