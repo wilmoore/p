@@ -1,6 +1,18 @@
 {
-  "lastSequence": 21,
+  "lastSequence": 22,
   "items": [
+    {
+      "id": 22,
+      "title": "New tmux sessions lack configured styling and vi-mode",
+      "description": "Bug: Running `p .` creates a new tmux session, but it launches with stock/unconfigured tmux instead of the styled, vi-mode configured session specified in ADR-002 and ADR-005.\n\nSteps to Reproduce:\n1. Run: p . (from any directory)\n2. Observe: tmux session created with default green status bar\n\nExpected Behavior:\n- Color-agnostic status bar (muted gray on default background per ADR-005)\n- Vi-style copy mode bindings (v for selection, y for copy per ADR-002)\n- Git branch displayed in status bar\n\nActual Behavior:\n- Stock tmux green status bar\n- No custom styling or bindings\n\nRoot Cause:\n- execute.go passes -f /dev/null correctly (disables user config)\n- BUT no runtime configuration injection happens after session creation\n- The status bar styling and vi-mode bindings from ADR-002/005 are never applied\n\nEnvironment: macOS Darwin 25.3.0, main branch",
+      "category": "bug",
+      "severity": "high",
+      "fingerprint": "bug|22|tmux-session-unconfigured",
+      "source": "/pro:bug",
+      "sourceBranch": "fix/tmux-session-unconfigured",
+      "createdAt": "2026-02-26T11:00:00Z",
+      "status": "in-progress"
+    },
     {
       "id": 1,
       "title": "Session Discovery and Selection",

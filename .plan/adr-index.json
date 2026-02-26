@@ -1,5 +1,5 @@
 {
-  "lastSequence": 7,
+  "lastSequence": 8,
   "entries": [
     {
       "branch": "mvp/p",
@@ -26,6 +26,12 @@
       "branch": "fix/output-display-and-cli-flags",
       "adrs": [
         "007-alternate-screen-buffer-for-selector.md"
+      ]
+    },
+    {
+      "branch": "fix/tmux-session-unconfigured",
+      "adrs": [
+        "008-inject-runtime-configuration.md"
       ]
     }
   ]
