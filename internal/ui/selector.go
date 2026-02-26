@@ -24,6 +24,10 @@ func ShowSelector(sessions []tmux.Session) (*tmux.Session, error) {
 	}
 	defer term.Restore(int(os.Stdin.Fd()), oldState)
 
+	// Enter alternate screen buffer for clean display
+	fmt.Print("\033[?1049h")
+	defer fmt.Print("\033[?1049l")
+
 	var query string
 	selected := 0
 
@@ -52,16 +56,16 @@ func ShowSelector(sessions []tmux.Session) (*tmux.Session, error) {
 		// Handle input
 		switch {
 		case n == 1 && b[0] == 3: // Ctrl+C
-			clearScreen()
-			return nil, fmt.Errorf("cancelled")
+			return nil, nil // Clean exit
 
 		case n == 1 && b[0] == 27: // Escape
-			clearScreen()
-			return nil, fmt.Errorf("cancelled")
+			return nil, nil // Clean exit
+
+		case n == 1 && b[0] == 'q' && query == "": // q to quit (only when not filtering)
+			return nil, nil // Clean exit
 
 		case n == 1 && b[0] == 13: // Enter
 			if len(filtered) > 0 {
-				clearScreen()
 				return &filtered[selected], nil
 			}
 
@@ -90,7 +94,6 @@ func ShowSelector(sessions []tmux.Session) (*tmux.Session, error) {
 			// Check if query is a valid number for direct selection
 			if idx, err := strconv.Atoi(query); err == nil {
 				if idx >= 1 && idx <= len(sessions) {
-					clearScreen()
 					return &sessions[idx-1], nil
 				}
 			}
@@ -137,9 +140,4 @@ func render(sessions []tmux.Session, query string, selected int) {
 
 	fmt.Print("\r\n")
 	fmt.Printf("> %s", query)
-}
-
-// clearScreen clears the terminal screen.
-func clearScreen() {
-	fmt.Print("\033[H\033[J")
 }

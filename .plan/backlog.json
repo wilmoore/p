@@ -1,5 +1,5 @@
 {
-  "lastSequence": 20,
+  "lastSequence": 21,
   "items": [
     {
       "id": 1,
@@ -307,6 +307,18 @@
       "createdAt": "2026-01-10T06:15:00Z",
       "status": "resolved",
       "resolvedAt": "2026-01-10T08:20:00Z"
+    },
+    {
+      "id": 21,
+      "title": "Display bug and missing CLI flags",
+      "description": "Multiple issues:\n\n1. Display Bug (Critical): Sessions appear scattered randomly across the screen instead of in a vertical list when running inside tmux.\n\n2. Missing --version flag: `p --version` doesn't work - no argument parsing exists.\n\n3. Missing --help flag: No usage/help documentation via CLI flag.\n\n4. Missing path argument feature: `p .` or `p /path/to/dir` should start a new session in the specified directory.\n\n5. Missing config propagation: When attaching to existing session, should apply p's tmux configuration.\n\nSteps to Reproduce (display bug):\n1. Have multiple tmux sessions running\n2. Run `p` from inside tmux\n3. Observe: sessions displayed in scattered positions instead of vertical list\n\nExpected: Sessions displayed as vertical list with proper formatting\nActual: Sessions appear at random positions across the terminal",
+      "category": "bug",
+      "severity": "critical",
+      "fingerprint": "bug|21|output-display-and-cli-flags",
+      "source": "/pro:bug",
+      "sourceBranch": "fix/output-display-and-cli-flags",
+      "createdAt": "2026-02-08T07:05:00Z",
+      "status": "in-progress"
     }
   ]
 }
