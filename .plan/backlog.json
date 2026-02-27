@@ -1,6 +1,19 @@
 {
-  "lastSequence": 24,
+  "lastSequence": 25,
   "items": [
+    {
+      "id": 25,
+      "title": "Comprehensive README documentation",
+      "description": "Enhance README with comprehensive documentation including: problem statement (Why p?), complete keybindings table, tmux features documentation (vi-mode, status bar), zero-config philosophy, developer workflow (Makefile), and beautiful presentation.",
+      "category": "feature",
+      "severity": "medium",
+      "fingerprint": "feature|25|comprehensive-readme",
+      "source": "/pro:feature",
+      "sourceBranch": "docs/comprehensive-readme",
+      "createdAt": "2026-02-27T17:50:00Z",
+      "status": "resolved",
+      "resolvedAt": "2026-02-27T18:00:00Z"
+    },
     {
       "id": 24,
       "title": "Add vim/emacs keyboard navigation to selector",
