@@ -75,6 +75,16 @@ func ShowSelector(sessions []tmux.Session) (*tmux.Session, error) {
 				selected = 0
 			}
 
+		case n == 1 && (b[0] == 10 || b[0] == 14): // Ctrl+J (0x0A) or Ctrl+N (0x0E) - move down
+			if selected < len(filtered)-1 {
+				selected++
+			}
+
+		case n == 1 && (b[0] == 11 || b[0] == 16): // Ctrl+K (0x0B) or Ctrl+P (0x10) - move up
+			if selected > 0 {
+				selected--
+			}
+
 		case n == 3 && b[0] == 27 && b[1] == 91: // Arrow keys
 			switch b[2] {
 			case 65: // Up

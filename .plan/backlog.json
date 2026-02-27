@@ -1,6 +1,19 @@
 {
-  "lastSequence": 23,
+  "lastSequence": 24,
   "items": [
+    {
+      "id": 24,
+      "title": "Add vim/emacs keyboard navigation to selector",
+      "description": "Add vim-style (Ctrl+J/K) and emacs-style (Ctrl+N/P) keyboard navigation to the session selector, matching fzf conventions.\n\nKeybindings:\n- Ctrl+J: Move selection down\n- Ctrl+K: Move selection up\n- Ctrl+N: Move selection down\n- Ctrl+P: Move selection up\n\nExisting arrow key navigation remains unchanged.",
+      "category": "feature",
+      "severity": "medium",
+      "fingerprint": "feature|24|vim-keyboard-navigation",
+      "source": "/pro:feature",
+      "sourceBranch": "feat/vim-keyboard-navigation",
+      "createdAt": "2026-02-27T16:45:00Z",
+      "status": "resolved",
+      "resolvedAt": "2026-02-27T17:35:00Z"
+    },
     {
       "id": 23,
       "title": "Fix tmux colors - match Savvy AI design",
