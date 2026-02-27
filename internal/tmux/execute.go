@@ -73,12 +73,18 @@ func configureSession(sessionName string) {
 	runTmuxSilent("bind-key", "-T", "copy-mode-vi", "y", "send-keys", "-X", "copy-selection-and-cancel")
 
 	// Status bar styling (ADR-005) - Savvy AI aesthetic
-	// Near-black background (colour232 ≈ rgba(5,5,5,.9))
-	// Sage green accent (colour108), muted gray (colour240), white for emphasis
+	// Dark gray background (colour235 ≈ #4e4e4e - matches Savvy AI navbar)
+	// Light gray foreground (colour240), sage green accent (colour108)
 	// Reset status to single line with default format (repairs any corrupted status-format)
 	runTmuxSilent("set-option", target, "status", "on")
 	runTmuxSilent("set-option", target, "status-format[0]", "#[align=left range=left #{E:status-left-style}]#[push-default]#{T;=/#{status-left-length}:status-left}#[pop-default]#[norange default]#[list=on align=#{status-justify}]#[list=left-marker]<#[list=right-marker]>#[list=on]#{W:#[range=window|#{window_index} #{E:window-status-style}#{?#{&&:#{window_last_flag},#{!=:#{E:window-status-last-style},default}}, #{E:window-status-last-style},}#{?#{&&:#{window_bell_flag},#{!=:#{E:window-status-bell-style},default}}, #{E:window-status-bell-style},#{?#{&&:#{||:#{window_activity_flag},#{window_silence_flag}},#{!=:#{E:window-status-activity-style},default}}, #{E:window-status-activity-style},}}]#[push-default]#{T:window-status-format}#[pop-default]#[norange default]#{?window_end_flag,,#{window-status-separator}},#[range=window|#{window_index} list=focus #{?#{!=:#{E:window-status-current-style},default},#{E:window-status-current-style},#{E:window-status-style}}#{?#{&&:#{window_last_flag},#{!=:#{E:window-status-last-style},default}}, #{E:window-status-last-style},}#{?#{&&:#{window_bell_flag},#{!=:#{E:window-status-bell-style},default}}, #{E:window-status-bell-style},#{?#{&&:#{||:#{window_activity_flag},#{window_silence_flag}},#{!=:#{E:window-status-activity-style},default}}, #{E:window-status-activity-style},}}]#[push-default]#{T:window-status-current-format}#[pop-default]#[norange default]#{?window_end_flag,,#{window-status-separator}}}#[nolist align=right range=right #{E:status-right-style}]#[push-default]#{T;=/#{status-right-length}:status-right}#[pop-default]#[norange default]")
-	runTmuxSilent("set-option", target, "status-style", "bg=colour232,fg=colour240")
+	runTmuxSilent("set-option", target, "status-style", "bg=colour235,fg=colour240")
+
+	// Pure black pane background (main interface)
+	runTmuxSilent("set-option", target, "window-style", "bg=colour16")
+
+	// Remove pane borders entirely
+	runTmuxSilent("set-option", target, "pane-border-status", "off")
 	runTmuxSilent("set-option", target, "status-left-length", "40")
 	runTmuxSilent("set-option", target, "status-right-length", "40")
 	runTmuxSilent("set-option", target, "status-left", "#[fg=colour108][#S] ")

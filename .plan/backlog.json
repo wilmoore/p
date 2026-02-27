@@ -1,6 +1,19 @@
 {
-  "lastSequence": 22,
+  "lastSequence": 23,
   "items": [
+    {
+      "id": 23,
+      "title": "Fix tmux colors - match Savvy AI design",
+      "description": "Issue: tmux colors are inverted from intended design.\n\nCurrent:\n- Main interface background: dark gray (inherited from terminal)\n- Footer/status line: colour232 (near-black #050505)\n- Visible border present\n\nTarget (match savvyai.dev):\n- Main interface: pure black (colour16)\n- Footer/status line: dark gray (colour235 - matches Savvy AI navbar)\n- Footer text: colour240 on dark gray\n- No borders (pane-border-status off)\n\nChanges made:\n1. status-style: bg=colour232 → bg=colour235\n2. window-style: added bg=colour16 (pure black pane background)\n3. pane-border-status: set to off",
+      "category": "bug",
+      "severity": "high",
+      "fingerprint": "bug|23|tmux-colors-inverted",
+      "source": "/pro:bug",
+      "sourceBranch": "feat/fix-tmux-colors",
+      "createdAt": "2026-02-26T18:30:00Z",
+      "status": "resolved",
+      "resolvedAt": "2026-02-27T00:00:00Z"
+    },
     {
       "id": 22,
       "title": "New tmux sessions lack configured styling and vi-mode",
