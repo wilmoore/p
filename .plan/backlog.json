@@ -1,9 +1,21 @@
 {
-  "lastSequence": 25,
+  "lastSequence": 26,
   "items": [
     {
+      "id": 26,
+      "title": "Resize hero image and remove redundant header",
+      "description": "The README hero image is displayed at 120px width which is too small. Additionally, there's a redundant <h1> header below the image that should be removed since the image alt text already serves as the title.\n\nChanges:\n1. Remove width=\"120\" from the hero img tag to make it display larger\n2. Remove the redundant <h1 align=\"center\">p</h1> header",
+      "category": "feature",
+      "severity": "low",
+      "fingerprint": "feature|26|resize-hero-image",
+      "source": "/pro:feature",
+      "sourceBranch": "feat/resize-hero-image-remove-header",
+      "createdAt": "2026-02-27T18:15:00Z",
+      "status": "resolved",
+      "resolvedAt": "2026-02-27T18:20:00Z"
+    },
+    {
       "id": 25,
-      "title": "Comprehensive README documentation",
       "description": "Enhance README with comprehensive documentation including: problem statement (Why p?), complete keybindings table, tmux features documentation (vi-mode, status bar), zero-config philosophy, developer workflow (Makefile), and beautiful presentation.",
       "category": "feature",
       "severity": "medium",

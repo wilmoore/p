@@ -1,14 +1,13 @@
 <p align="center">
-  <img src="assets/hero.png" alt="p" width="120">
-  <h1 align="center">p</h1>
-  <p align="center">
-    <strong>Minimal tmux session switcher</strong>
-  </p>
-  <p align="center">
-    <a href="https://pkg.go.dev/github.com/wilmoore/p"><img src="https://pkg.go.dev/badge/github.com/wilmoore/p.svg" alt="Go Reference"></a>
-    <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License: MIT"></a>
-    <a href="https://github.com/wilmoore/p/releases"><img src="https://img.shields.io/github/v/release/wilmoore/p" alt="Release"></a>
-  </p>
+  <img src="assets/hero.png" alt="p">
+</p>
+<p align="center">
+  <strong>Minimal tmux session switcher</strong>
+</p>
+<p align="center">
+  <a href="https://pkg.go.dev/github.com/wilmoore/p"><img src="https://pkg.go.dev/badge/github.com/wilmoore/p.svg" alt="Go Reference"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License: MIT"></a>
+  <a href="https://github.com/wilmoore/p/releases"><img src="https://img.shields.io/github/v/release/wilmoore/p" alt="Release"></a>
 </p>
 
 ---
