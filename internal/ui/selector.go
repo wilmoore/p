@@ -61,9 +61,6 @@ func ShowSelector(sessions []tmux.Session) (*tmux.Session, error) {
 		case n == 1 && b[0] == 27: // Escape
 			return nil, nil // Clean exit
 
-		case n == 1 && b[0] == 'q' && query == "": // q to quit (only when not filtering)
-			return nil, nil // Clean exit
-
 		case n == 1 && b[0] == 13: // Enter
 			if len(filtered) > 0 {
 				return &filtered[selected], nil
