@@ -93,6 +93,34 @@ p ~/projects     # Session named "projects"
 
 Session names are derived from the directory basename. If you're already inside tmux, `p` seamlessly switches clients.
 
+### Workflows
+
+**Create a new project:**
+
+```bash
+mkdir something-new && p !$
+```
+
+> `!$` is bash/zsh history expansion—it's the last argument from the previous command. In other shells (fish, POSIX sh), type the path explicitly: `mkdir my-project && p my-project`
+
+**Quick session switch:**
+
+```bash
+p
+# type to filter
+# Enter to attach
+```
+
+Type a few characters to fuzzy filter, then hit Enter. This is the core loop—muscle memory kicks in fast.
+
+**From anywhere:**
+
+```bash
+p ~/projects/api
+```
+
+No need to `cd` first. The path resolves automatically.
+
 ---
 
 ## How It Works

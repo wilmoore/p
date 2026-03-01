@@ -1,6 +1,18 @@
 {
-  "lastSequence": 26,
+  "lastSequence": 27,
   "items": [
+    {
+      "id": 27,
+      "title": "Add workflow documentation",
+      "description": "Document common p workflows to help users understand idiomatic usage:\n\n1. Add workflow examples to README.md Usage section\n2. Create doc/examples.md with detailed examples including:\n   - mkdir && p !$ (explaining bash history expansion)\n   - p . for current directory\n   - Rapid filtering technique\n\nThis addresses user confusion about how to create sessions for new projects.",
+      "category": "feature",
+      "severity": "medium",
+      "fingerprint": "feature|27|workflow-documentation",
+      "source": "/pro:feature",
+      "sourceBranch": "feat/add-workflow-documentation",
+      "createdAt": "2026-03-01T18:00:00Z",
+      "status": "in-progress"
+    },
     {
       "id": 26,
       "title": "Resize hero image and remove redundant header",
