@@ -121,6 +121,23 @@ p ~/projects/api
 
 No need to `cd` first. The path resolves automatically.
 
+### Environment Variables
+
+**Default Windows:**
+
+Set `P_WINDOWS` to configure default windows for new sessions (comma-separated).
+
+```bash
+export P_WINDOWS=home,vim,server
+p ~/projects/app
+# Creates session 'app' with windows:
+# 0: home
+# 1: vim
+# 2: server
+```
+
+Default: `home,cmd`
+
 ---
 
 ## How It Works

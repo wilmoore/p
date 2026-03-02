@@ -1,5 +1,5 @@
 {
-  "lastSequence": 8,
+  "lastSequence": 10,
   "entries": [
     {
       "branch": "mvp/p",
@@ -32,6 +32,13 @@
       "branch": "fix/tmux-session-unconfigured",
       "adrs": [
         "008-inject-runtime-configuration.md"
+      ]
+    },
+    {
+      "branch": "feat/default-windows-and-consistent-background",
+      "adrs": [
+        "009-configurable-default-windows.md",
+        "010-global-window-style.md"
       ]
     }
   ]

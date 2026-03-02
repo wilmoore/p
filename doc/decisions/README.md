@@ -26,3 +26,5 @@ We use the [Michael Nygard format](https://cognitect.com/blog/2011/11/15/documen
 - [006. Simplify to session-only mode](006-simplify-to-session-only.md)
 - [007. Alternate screen buffer for selector display](007-alternate-screen-buffer-for-selector.md)
 - [008. Inject Runtime Configuration into tmux Sessions](008-inject-runtime-configuration.md)
+- [009. Configurable Default Windows for New Sessions](009-configurable-default-windows.md)
+- [010. Apply Global Window Style for Consistent Backgrounds](010-global-window-style.md)
