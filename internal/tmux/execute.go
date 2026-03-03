@@ -3,6 +3,7 @@ package tmux
 import (
 	"os"
 	"os/exec"
+	"strings"
 	"syscall"
 )
 
@@ -30,14 +31,18 @@ func CreateSession(sessionName, workingDir string) error {
 		if err := runTmux("new-session", "-d", "-s", sessionName, "-c", workingDir); err != nil {
 			return err
 		}
+		// Configure session BEFORE creating windows so styles are inherited
 		configureSession(sessionName)
+		createDefaultWindows(sessionName, workingDir)
 		return execTmux("switch-client", "-t", sessionName)
 	}
 	// Outside tmux: create detached, configure, then attach
 	if err := runTmux("new-session", "-d", "-s", sessionName, "-c", workingDir); err != nil {
 		return err
 	}
+	// Configure session BEFORE creating windows so styles are inherited
 	configureSession(sessionName)
+	createDefaultWindows(sessionName, workingDir)
 	return execTmux("attach-session", "-t", sessionName)
 }
 
@@ -61,6 +66,35 @@ func runTmux(args ...string) error {
 	return cmd.Run()
 }
 
+// createDefaultWindows creates default windows for a new session based on P_WINDOWS env var.
+// Default: home,cmd
+func createDefaultWindows(sessionName, workingDir string) {
+	// Get window names from env or use default
+	windowsEnv := os.Getenv("P_WINDOWS")
+	if windowsEnv == "" {
+		windowsEnv = "home,cmd"
+	}
+
+	windows := strings.Split(windowsEnv, ",")
+	if len(windows) == 0 {
+		return
+	}
+
+	target := "-t" + sessionName
+
+	// Rename first window (index 0)
+	runTmuxSilent("rename-window", target+":0", strings.TrimSpace(windows[0]))
+
+	// Create additional windows
+	for i := 1; i < len(windows); i++ {
+		name := strings.TrimSpace(windows[i])
+		runTmuxSilent("new-window", target, "-c", workingDir, "-n", name)
+	}
+
+	// Select window 0
+	runTmuxSilent("select-window", target+":0")
+}
+
 // configureSession injects minimal ergonomic defaults into a tmux session.
 // Per ADR-002: vi-style copy mode bindings
 // Per ADR-005: color-agnostic status bar styling
@@ -81,7 +115,9 @@ func configureSession(sessionName string) {
 	runTmuxSilent("set-option", target, "status-style", "bg=colour235,fg=colour240")
 
 	// Pure black pane background (main interface)
-	runTmuxSilent("set-option", target, "window-style", "bg=colour16")
+	// Use global options (-g) so all windows inherit the black background
+	runTmuxSilent("set-option", "-g", "window-style", "bg=colour16")
+	runTmuxSilent("set-option", "-g", "window-active-style", "bg=colour16")
 
 	// Remove pane borders entirely
 	runTmuxSilent("set-option", target, "pane-border-status", "off")

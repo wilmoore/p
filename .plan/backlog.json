@@ -1,6 +1,18 @@
 {
-  "lastSequence": 27,
+  "lastSequence": 28,
   "items": [
+    {
+      "id": 28,
+      "title": "Default windows on new session + consistent background",
+      "description": "Two features:\n\n1. Default Windows: When creating a new tmux session, create configurable default windows. Default: 'home,cmd' (window 0: home, window 1: cmd). Overridable via P_WINDOWS env var (comma-separated).\n\nUsage: P_WINDOWS=home,web,cmd p ~/path/to/project\n\n2. Background Bug Fix: Subsequent windows (1+) have grey background instead of black. Window 0 is correct. Root cause: window-style bg=colour16 not applying to new windows created after session.",
+      "category": "feature",
+      "severity": "medium",
+      "fingerprint": "feature|28|default-windows-consistent-background",
+      "source": "/pro:feature",
+      "sourceBranch": "feat/default-windows-and-consistent-background",
+      "createdAt": "2026-03-01T18:15:00Z",
+      "status": "in-progress"
+    },
     {
       "id": 27,
       "title": "Add workflow documentation",
