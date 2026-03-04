@@ -6,4 +6,9 @@ toolchain go1.24.11
 
 require golang.org/x/term v0.39.0
 
-require golang.org/x/sys v0.40.0 // indirect
+require golang.org/x/sys v0.40.0
+
+require (
+	github.com/gofrs/flock v0.8.1
+	gopkg.in/check.v1 v1.0.0-20201130134442-10cb98267c6c // indirect
+)

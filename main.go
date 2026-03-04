@@ -1,10 +1,14 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"os"
 	"path/filepath"
+	"strings"
+	"time"
 
+	"github.com/wilmoore/p/internal/history"
 	"github.com/wilmoore/p/internal/tmux"
 	"github.com/wilmoore/p/internal/ui"
 )
@@ -15,10 +19,12 @@ var Version = "dev"
 const usage = `p - minimal tmux session switcher
 
 Usage:
-  p              Show interactive session selector
-  p <path>       Create new session in directory (use . for current directory)
-  p --version    Show version information
-  p --help       Show this help message
+  p                          Show interactive session selector
+  p <path>                   Create new session in directory (use . for current directory)
+  p <path> --name <custom>   Create session with a custom name
+  p --log                    Browse session history ledger
+  p --version                Show version information
+  p --help                   Show this help message
 
 Navigation:
   Type           Filter sessions by name
@@ -30,6 +36,8 @@ Examples:
   p              Select from existing sessions
   p .            Create session in current directory
   p ~/projects   Create session in ~/projects
+  p ./revenue --name savvy-revenue
+  p --log        Inspect or relaunch recent sessions
 `
 
 func main() {
@@ -40,29 +48,30 @@ func main() {
 }
 
 func run() error {
-	args := os.Args[1:]
-
-	// Handle flags
-	if len(args) > 0 {
-		switch args[0] {
-		case "--version", "-v":
-			fmt.Println(Version)
-			return nil
-		case "--help", "-h":
-			fmt.Print(usage)
-			return nil
-		}
-
-		// Treat argument as path for new session
-		if args[0] != "" && args[0][0] != '-' {
-			return createSessionFromPath(args[0])
-		}
-
-		// Unknown flag
-		return fmt.Errorf("unknown option: %s\nRun 'p --help' for usage", args[0])
+	cmd, err := parseArgs(os.Args[1:])
+	if err != nil {
+		return err
 	}
 
-	// No arguments: show session selector
+	switch cmd.kind {
+	case commandVersion:
+		fmt.Println(Version)
+		return nil
+	case commandHelp:
+		fmt.Print(usage)
+		return nil
+	case commandHistory:
+		return showHistory()
+	case commandCreate:
+		return createSessionFromPath(cmd.path, cmd.sessionName)
+	case commandSelector:
+		return showSessionSelector()
+	default:
+		return fmt.Errorf("unknown command")
+	}
+}
+
+func showSessionSelector() error {
 	sessions, err := tmux.ListSessions()
 	if err != nil && !tmux.IsNoServerError(err) {
 		return fmt.Errorf("failed to list tmux sessions: %w", err)
@@ -72,63 +81,184 @@ func run() error {
 		return fmt.Errorf("no tmux sessions available")
 	}
 
-	// Show selector and get user choice
 	choice, err := ui.ShowSelector(sessions)
 	if err != nil {
 		return err
 	}
-
-	// User cancelled (Ctrl+C, Esc, q)
 	if choice == nil {
 		return nil
 	}
-
-	// Attach to the selected session
-	return tmux.AttachToSession(choice.Name)
+	return attachAndLog(choice.Name, history.ActionAttach)
 }
 
-// createSessionFromPath creates a new tmux session in the specified directory.
-func createSessionFromPath(path string) error {
-	// Resolve path
-	var absPath string
-	var err error
-
-	if path == "." {
-		absPath, err = os.Getwd()
-		if err != nil {
-			return fmt.Errorf("failed to get current directory: %w", err)
-		}
-	} else {
-		// Expand ~ to home directory
-		if len(path) > 0 && path[0] == '~' {
-			home, err := os.UserHomeDir()
-			if err != nil {
-				return fmt.Errorf("failed to get home directory: %w", err)
-			}
-			path = filepath.Join(home, path[1:])
-		}
-
-		absPath, err = filepath.Abs(path)
-		if err != nil {
-			return fmt.Errorf("failed to resolve path: %w", err)
-		}
+func showHistory() error {
+	entries, err := history.List(200)
+	if err != nil {
+		return err
 	}
+	if len(entries) == 0 {
+		fmt.Println("No session history yet.")
+		return nil
+	}
+	choice, err := ui.ShowHistory(entries)
+	if err != nil {
+		return err
+	}
+	if choice == nil {
+		return nil
+	}
+	if choice.TargetDir == "" {
+		return fmt.Errorf("history entry is missing target directory")
+	}
+	return createSessionFromPath(choice.TargetDir, choice.SessionName)
+}
 
-	// Verify directory exists
-	info, err := os.Stat(absPath)
+// createSessionFromPath creates (or attaches to) a tmux session in the specified directory.
+func createSessionFromPath(path, overrideName string) error {
+	spec, err := buildSessionSpec(path, overrideName)
+	if err != nil {
+		return err
+	}
+	action, err := tmux.CreateSession(spec.sessionName, spec.workingDir)
+	if err != nil {
+		return err
+	}
+	logAction := history.ActionCreate
+	if action == tmux.LaunchActionAttachExisting {
+		logAction = history.ActionAttachExisting
+	}
+	logLaunch(logAction, spec.sessionName, spec.workingDir)
+	return nil
+}
+
+type sessionSpec struct {
+	sessionName string
+	workingDir  string
+}
+
+func buildSessionSpec(path, overrideName string) (*sessionSpec, error) {
+	if path == "" {
+		return nil, fmt.Errorf("path is required")
+	}
+	resolved, err := resolvePath(path)
+	if err != nil {
+		return nil, err
+	}
+	info, err := os.Stat(resolved)
 	if err != nil {
 		if os.IsNotExist(err) {
-			return fmt.Errorf("directory does not exist: %s", absPath)
+			return nil, fmt.Errorf("directory does not exist: %s", resolved)
 		}
-		return fmt.Errorf("failed to stat path: %w", err)
+		return nil, fmt.Errorf("failed to stat path: %w", err)
 	}
 	if !info.IsDir() {
-		return fmt.Errorf("not a directory: %s", absPath)
+		return nil, fmt.Errorf("not a directory: %s", resolved)
+	}
+	sessionName := overrideName
+	if sessionName == "" {
+		sessionName = filepath.Base(resolved)
+	}
+	return &sessionSpec{sessionName: sessionName, workingDir: resolved}, nil
+}
+
+func resolvePath(path string) (string, error) {
+	switch {
+	case path == ".":
+		return os.Getwd()
+	case strings.HasPrefix(path, "~"):
+		home, err := os.UserHomeDir()
+		if err != nil {
+			return "", fmt.Errorf("failed to get home directory: %w", err)
+		}
+		return filepath.Abs(filepath.Join(home, path[1:]))
+	default:
+		return filepath.Abs(path)
+	}
+}
+
+func attachAndLog(sessionName string, action history.Action) error {
+	targetDir, err := tmux.GetSessionPath(sessionName)
+	if err != nil {
+		targetDir = ""
+	}
+	if err := tmux.AttachToSession(sessionName); err != nil {
+		return err
+	}
+	logLaunch(action, sessionName, targetDir)
+	return nil
+}
+
+func logLaunch(action history.Action, sessionName, targetDir string) {
+	if sessionName == "" {
+		return
+	}
+	invokeDir, _ := os.Getwd()
+	if targetDir != "" {
+		abs, err := filepath.Abs(targetDir)
+		if err == nil {
+			targetDir = abs
+		}
+	}
+	entry := history.Entry{
+		Timestamp:   time.Now(),
+		Action:      action,
+		SessionName: sessionName,
+		InvokeDir:   invokeDir,
+		TargetDir:   targetDir,
+	}
+	if err := history.Append(entry); err != nil {
+		fmt.Fprintf(os.Stderr, "warning: failed to write history: %v\n", err)
+	}
+}
+
+type commandKind int
+
+const (
+	commandSelector commandKind = iota
+	commandCreate
+	commandHistory
+	commandVersion
+	commandHelp
+)
+
+type command struct {
+	kind        commandKind
+	path        string
+	sessionName string
+}
+
+func parseArgs(args []string) (*command, error) {
+	if len(args) == 0 {
+		return &command{kind: commandSelector}, nil
+	}
+	switch args[0] {
+	case "--version", "-v":
+		return &command{kind: commandVersion}, nil
+	case "--help", "-h":
+		return &command{kind: commandHelp}, nil
+	case "--log":
+		if len(args) > 1 {
+			return nil, fmt.Errorf("--log cannot be combined with other arguments")
+		}
+		return &command{kind: commandHistory}, nil
 	}
 
-	// Derive session name from directory basename
-	sessionName := filepath.Base(absPath)
-
-	// Create and attach to the session
-	return tmux.CreateSession(sessionName, absPath)
+	cmd := &command{kind: commandCreate, path: args[0]}
+	for i := 1; i < len(args); i++ {
+		arg := args[i]
+		if strings.HasPrefix(arg, "--name=") {
+			cmd.sessionName = strings.TrimPrefix(arg, "--name=")
+			continue
+		}
+		if arg == "--name" {
+			if i+1 >= len(args) {
+				return nil, errors.New("--name requires a value")
+			}
+			cmd.sessionName = args[i+1]
+			i++
+			continue
+		}
+		return nil, fmt.Errorf("unknown option: %s", arg)
+	}
+	return cmd, nil
 }

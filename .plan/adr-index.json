@@ -1,5 +1,5 @@
 {
-  "lastSequence": 10,
+  "lastSequence": 11,
   "entries": [
     {
       "branch": "mvp/p",
@@ -39,6 +39,12 @@
       "adrs": [
         "009-configurable-default-windows.md",
         "010-global-window-style.md"
+      ]
+    },
+    {
+      "branch": "feat/session-enhancements",
+      "adrs": [
+        "011-session-history-ledger.md"
       ]
     }
   ]

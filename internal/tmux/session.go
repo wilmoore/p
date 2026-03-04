@@ -2,6 +2,7 @@ package tmux
 
 import (
 	"bytes"
+	"fmt"
 	"os/exec"
 	"strings"
 )
@@ -43,6 +44,22 @@ func ListSessions() ([]Session, error) {
 	}
 
 	return sessions, nil
+}
+
+// GetSessionPath returns the directory the session was created in.
+func GetSessionPath(sessionName string) (string, error) {
+	cmd := exec.Command("tmux", "-f", "/dev/null", "display-message", "-p", "-t", sessionName, "#{session_path}")
+	var stdout, stderr bytes.Buffer
+	cmd.Stdout = &stdout
+	cmd.Stderr = &stderr
+	if err := cmd.Run(); err != nil {
+		return "", fmt.Errorf("failed to read session path: %s", strings.TrimSpace(stderr.String()))
+	}
+	path := strings.TrimSpace(stdout.String())
+	if path == "" {
+		return "", fmt.Errorf("session path not available")
+	}
+	return path, nil
 }
 
 // IsNoServerError checks if the error indicates no tmux server is running.
