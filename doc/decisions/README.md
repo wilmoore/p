@@ -28,3 +28,4 @@ We use the [Michael Nygard format](https://cognitect.com/blog/2011/11/15/documen
 - [008. Inject Runtime Configuration into tmux Sessions](008-inject-runtime-configuration.md)
 - [009. Configurable Default Windows for New Sessions](009-configurable-default-windows.md)
 - [010. Apply Global Window Style for Consistent Backgrounds](010-global-window-style.md)
+- [011. Session History Ledger and Duplicate Attach](011-session-history-ledger.md)

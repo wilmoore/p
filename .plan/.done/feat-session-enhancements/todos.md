@@ -1,0 +1,9 @@
+- [ ] Remove Gemini artifacts (`p -`, duplicated tmux structs, sessionhistory pkg, session handoff files)
+- [ ] Implement structured CLI parser supporting `--name` and `--log`
+- [ ] Update help/README usage to reflect new flags and dropped `p -`
+- [ ] Add session creation helper with optional name override
+- [ ] Implement duplicate-session auto-attach logic
+- [ ] Build session history ledger (write + trim)
+- [ ] Implement `p --log` selector (list entries, relaunch on confirm)
+- [ ] Add unit tests (parser, ledger, duplicate detection)
+- [ ] Run coderabbit --prompt-only

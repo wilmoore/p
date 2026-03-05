@@ -32,7 +32,7 @@ vet: ## Run go vet
 	go vet ./...
 
 lint: ## Run golangci-lint
-	golangci-lint run
+	golangci-lint run --fast --timeout 5m --concurrency 2
 
 ##@ Cleanup
 

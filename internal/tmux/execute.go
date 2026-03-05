@@ -1,10 +1,22 @@
 package tmux
 
 import (
+	"bytes"
+	"errors"
+	"fmt"
 	"os"
 	"os/exec"
+	"path/filepath"
 	"strings"
 	"syscall"
+)
+
+// LaunchAction describes the outcome of a CreateSession call.
+type LaunchAction string
+
+const (
+	LaunchActionCreate         LaunchAction = "create"
+	LaunchActionAttachExisting LaunchAction = "attach-existing"
 )
 
 // AttachToSession attaches to or switches to an existing session.
@@ -24,26 +36,32 @@ func AttachToSession(sessionName string) error {
 
 // CreateSession creates a new tmux session and attaches to it.
 // If already inside tmux, creates the session detached and then switches to it.
-func CreateSession(sessionName, workingDir string) error {
-	// Check if we're inside tmux
-	if os.Getenv("TMUX") != "" {
-		// Inside tmux: create detached session first, configure it, then switch
-		if err := runTmux("new-session", "-d", "-s", sessionName, "-c", workingDir); err != nil {
-			return err
+func CreateSession(sessionName, workingDir string) (LaunchAction, error) {
+	insideTmux := os.Getenv("TMUX") != ""
+	if err := newDetachedSession(sessionName, workingDir); err != nil {
+		var dupErr *duplicateSessionError
+		if errors.As(err, &dupErr) {
+			matching, matchErr := sessionMatchesDirectory(sessionName, workingDir)
+			if matchErr != nil {
+				return "", matchErr
+			}
+			if !matching {
+				return "", err
+			}
+			if err := AttachToSession(sessionName); err != nil {
+				return "", err
+			}
+			return LaunchActionAttachExisting, nil
 		}
-		// Configure session BEFORE creating windows so styles are inherited
-		configureSession(sessionName)
-		createDefaultWindows(sessionName, workingDir)
-		return execTmux("switch-client", "-t", sessionName)
+		return "", err
 	}
-	// Outside tmux: create detached, configure, then attach
-	if err := runTmux("new-session", "-d", "-s", sessionName, "-c", workingDir); err != nil {
-		return err
-	}
-	// Configure session BEFORE creating windows so styles are inherited
+
 	configureSession(sessionName)
 	createDefaultWindows(sessionName, workingDir)
-	return execTmux("attach-session", "-t", sessionName)
+	if insideTmux {
+		return LaunchActionCreate, execTmux("switch-client", "-t", sessionName)
+	}
+	return LaunchActionCreate, execTmux("attach-session", "-t", sessionName)
 }
 
 // execTmux replaces the current process with tmux.
@@ -64,6 +82,89 @@ func runTmux(args ...string) error {
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 	return cmd.Run()
+}
+
+func newDetachedSession(sessionName, workingDir string) error {
+	args := []string{"-f", "/dev/null", "new-session", "-d", "-s", sessionName, "-c", workingDir}
+	cmd := exec.Command("tmux", args...)
+	var stderr bytes.Buffer
+	cmd.Stderr = &stderr
+	cmd.Stdout = os.Stdout
+	if err := cmd.Run(); err != nil {
+		if strings.Contains(stderr.String(), "duplicate session") {
+			return &duplicateSessionError{sessionName: sessionName}
+		}
+		msg := strings.TrimSpace(stderr.String())
+		if msg == "" {
+			msg = err.Error()
+		}
+		return fmt.Errorf("failed to create session: %s", msg)
+	}
+	return nil
+}
+
+type duplicateSessionError struct {
+	sessionName string
+}
+
+func (e *duplicateSessionError) Error() string {
+	return fmt.Sprintf("duplicate session: %s", e.sessionName)
+}
+
+func sessionMatchesDirectory(sessionName, dir string) (bool, error) {
+	existing, err := GetSessionPath(sessionName)
+	if err != nil {
+		return false, err
+	}
+
+	left, err := fingerprintPath(existing)
+	if err != nil {
+		return false, err
+	}
+	right, err := fingerprintPath(dir)
+	if err != nil {
+		return false, err
+	}
+
+	if left.canonicalOK && right.canonicalOK {
+		return left.canonical == right.canonical, nil
+	}
+	if left.canonicalErr != nil {
+		fmt.Fprintf(os.Stderr, "warning: unable to fully resolve session %s path: %v\n", sessionName, left.canonicalErr)
+	}
+	if right.canonicalErr != nil {
+		fmt.Fprintf(os.Stderr, "warning: unable to fully resolve requested path %s: %v\n", dir, right.canonicalErr)
+	}
+	if left.abs == right.abs {
+		return true, nil
+	}
+	return false, nil
+}
+
+type pathFingerprint struct {
+	abs          string
+	canonical    string
+	canonicalOK  bool
+	canonicalErr error
+}
+
+func fingerprintPath(p string) (pathFingerprint, error) {
+	abs, err := filepath.Abs(p)
+	if err != nil {
+		return pathFingerprint{}, err
+	}
+	fp := pathFingerprint{abs: abs}
+	resolved, err := filepath.EvalSymlinks(abs)
+	if err != nil {
+		if os.IsNotExist(err) {
+			return fp, nil
+		}
+		fp.canonicalErr = err
+		return fp, nil
+	}
+	fp.canonical = resolved
+	fp.canonicalOK = true
+	return fp, nil
 }
 
 // createDefaultWindows creates default windows for a new session based on P_WINDOWS env var.

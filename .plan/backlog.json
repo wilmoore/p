@@ -1,5 +1,5 @@
 {
-  "lastSequence": 28,
+  "lastSequence": 30,
   "items": [
     {
       "id": 28,
@@ -66,7 +66,7 @@
     {
       "id": 23,
       "title": "Fix tmux colors - match Savvy AI design",
-      "description": "Issue: tmux colors are inverted from intended design.\n\nCurrent:\n- Main interface background: dark gray (inherited from terminal)\n- Footer/status line: colour232 (near-black #050505)\n- Visible border present\n\nTarget (match savvyai.dev):\n- Main interface: pure black (colour16)\n- Footer/status line: dark gray (colour235 - matches Savvy AI navbar)\n- Footer text: colour240 on dark gray\n- No borders (pane-border-status off)\n\nChanges made:\n1. status-style: bg=colour232 → bg=colour235\n2. window-style: added bg=colour16 (pure black pane background)\n3. pane-border-status: set to off",
+      "description": "Issue: tmux colors are inverted from intended design.\n\nCurrent:\n- Main interface background: dark gray (inherited from terminal)\n- Footer/status line: colour232 (near-black #050505)\n- Visible border present\n\nTarget (match savvyai.dev):\n- Main interface: pure black (colour16)\n- Footer/status line: dark gray (colour235 - matches Savvy AI navbar)\n- Footer text: colour240 on dark gray\n- No borders (pane-border-status off)\n\nChanges made:\n1. status-style: bg=colour232 \u2192 bg=colour235\n2. window-style: added bg=colour16 (pure black pane background)\n3. pane-border-status: set to off",
       "category": "bug",
       "severity": "high",
       "fingerprint": "bug|23|tmux-colors-inverted",
@@ -406,6 +406,30 @@
       "sourceBranch": "fix/output-display-and-cli-flags",
       "createdAt": "2026-02-08T07:05:00Z",
       "status": "in-progress"
+    },
+    {
+      "id": 29,
+      "title": "Session launch quality-of-life",
+      "description": "Auto-attach duplicate sessions when directories match, allow custom session names via --name, and add a history selector (p --log) for inspecting/relaunching recent sessions.",
+      "category": "feature",
+      "severity": "medium",
+      "fingerprint": "feature|29|session-launch-qol",
+      "source": "/pro:feature",
+      "sourceBranch": "feat/session-enhancements",
+      "createdAt": "2026-03-04T15:22:39Z",
+      "status": "in-progress"
+    },
+    {
+      "id": 30,
+      "title": "Make lint target exits with SIGKILL",
+      "description": "`make lint` invokes golangci-lint which is consistently killed (exit 9) on this host even though running the same command directly succeeds. Investigate resource utilization and adjust the Makefile target or CI configuration so `make lint` completes reliably without manual intervention.",
+      "category": "bug",
+      "severity": "medium",
+      "fingerprint": "bug|30|make-lint-killed",
+      "source": "/pro:pr",
+      "sourceBranch": "feat/session-enhancements",
+      "createdAt": "2026-03-04T23:06:58Z",
+      "status": "open"
     }
   ]
 }

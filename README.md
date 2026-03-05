@@ -55,6 +55,8 @@ go install github.com/wilmoore/p@latest
 p                  # Interactive session selector
 p .                # Create session in current directory
 p ~/projects/app   # Create session in specific directory
+p ./revenue --name savvy-revenue   # Custom session name
+p --log            # Inspect and relaunch from history
 p --help           # Show help
 p --version        # Show version
 ```
@@ -87,11 +89,24 @@ Sessions:
 ### Create Session from Directory
 
 ```bash
-p .              # Session named after current directory
-p ~/projects     # Session named "projects"
+p .                             # Session named after current directory
+p ~/projects                    # Session named "projects"
+p src/savvyai/revenue --name savvy-revenue
 ```
 
-Session names are derived from the directory basename. If you're already inside tmux, `p` seamlessly switches clients.
+- Session names default to the directory basename, or you can pin a custom label with `--name`.
+- If a session name already exists and points at the same directory, `p` simply re-attaches instead of erroring.
+- Already inside tmux? `p` switches the current client seamlessly.
+
+### Session History
+
+Forgot what you were working on yesterday? Use the history ledger:
+
+```bash
+p --log
+```
+
+You’ll see the familiar selector populated with recent launches (session, action, timestamp, directories). Filter just like the main view, press **Enter** to relaunch a highlighted entry, or **Esc** to exit after inspecting. History is stored at `${XDG_STATE_HOME:-~/.local/state}/p/session-log.jsonl` (override with `P_HISTORY_PATH`).
 
 ### Workflows
 
