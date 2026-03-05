@@ -1,0 +1,68 @@
+{
+  "lastSequence": 12,
+  "entries": [
+    {
+      "number": 1,
+      "title": "Use CDPATH for Discovery",
+      "file": "doc/decisions/001-use-cdpath-for-discovery.md"
+    },
+    {
+      "number": 2,
+      "title": "Zero-config tmux execution",
+      "file": "doc/decisions/002-zero-config-tmux-execution.md"
+    },
+    {
+      "number": 3,
+      "title": "Collision-free session naming",
+      "file": "doc/decisions/003-collision-free-session-naming.md"
+    },
+    {
+      "number": 4,
+      "title": "Stack-based drill-down navigation",
+      "file": "doc/decisions/004-stack-based-drill-down-navigation.md"
+    },
+    {
+      "number": 5,
+      "title": "Color-agnostic status bar styling",
+      "file": "doc/decisions/005-color-agnostic-status-bar.md"
+    },
+    {
+      "number": 6,
+      "title": "Simplify to session-only mode",
+      "file": "doc/decisions/006-simplify-to-session-only.md"
+    },
+    {
+      "number": 7,
+      "title": "Alternate screen buffer for selector",
+      "file": "doc/decisions/007-alternate-screen-buffer-for-selector.md"
+    },
+    {
+      "number": 8,
+      "title": "Inject runtime configuration into tmux sessions",
+      "file": "doc/decisions/008-inject-runtime-configuration.md"
+    },
+    {
+      "number": 9,
+      "title": "Configurable default windows",
+      "file": "doc/decisions/009-configurable-default-windows.md"
+    },
+    {
+      "number": 10,
+      "title": "Apply global window style for consistent backgrounds",
+      "file": "doc/decisions/010-global-window-style.md"
+    },
+    {
+      "number": 11,
+      "title": "Session history ledger and duplicate attach",
+      "file": "doc/decisions/011-session-history-ledger.md"
+    },
+    {
+      "number": 12,
+      "title": "Separate session create from attach",
+      "file": "doc/decisions/012-separate-session-create-from-attach.md",
+      "branches": [
+        "fix/p-log-empty-history"
+      ]
+    }
+  ]
+}

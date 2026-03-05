@@ -128,7 +128,7 @@ func createSessionFromPath(path, overrideName string) error {
 		logAction = history.ActionAttachExisting
 	}
 	logLaunch(logAction, spec.sessionName, spec.workingDir)
-	return nil
+	return tmux.AttachToSession(spec.sessionName)
 }
 
 type sessionSpec struct {
@@ -181,11 +181,8 @@ func attachAndLog(sessionName string, action history.Action) error {
 	if err != nil {
 		targetDir = ""
 	}
-	if err := tmux.AttachToSession(sessionName); err != nil {
-		return err
-	}
 	logLaunch(action, sessionName, targetDir)
-	return nil
+	return tmux.AttachToSession(sessionName)
 }
 
 func logLaunch(action history.Action, sessionName, targetDir string) {
