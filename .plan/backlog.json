@@ -1,5 +1,5 @@
 {
-  "lastSequence": 30,
+  "lastSequence": 31,
   "items": [
     {
       "id": 28,
@@ -430,6 +430,18 @@
       "sourceBranch": "feat/session-enhancements",
       "createdAt": "2026-03-04T23:06:58Z",
       "status": "open"
+    },
+    {
+      "id": 31,
+      "title": "p --log shows empty history",
+      "description": "Steps:\n1. From shell, run `p browser-extension-add-to-attio`\n2. Run `p browser-extension-conversation-titles-chatgpt`\n3. Immediately run `p --log`\n\nExpected: the history ledger lists the two sessions that were just created/attached.\nActual: CLI prints `No session history yet.` even though sessions were created moments before.\nEnvironment: macOS (per user screenshots), tmux via dev build `p --version` -> dev.",
+      "category": "bug",
+      "severity": "critical",
+      "fingerprint": "bug|31|p-log-shows-empty-history",
+      "source": "/pro:bug",
+      "sourceBranch": "fix/p-log-empty-history",
+      "createdAt": "2026-03-05T09:42:26Z",
+      "status": "in-progress"
     }
   ]
 }

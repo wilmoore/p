@@ -1,0 +1,5 @@
+- [x] Refactor `tmux.CreateSession` to stop attaching so caller can log before exec
+- [x] Update main flow to log before invoking tmux attach/switch
+- [x] Ensure selector/history flows log prior to attachment
+- [ ] Verify ledger file receives entries and `p --log` displays them
+- [ ] Run coderabbit --prompt-only

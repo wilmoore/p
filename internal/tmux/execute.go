@@ -34,10 +34,10 @@ func AttachToSession(sessionName string) error {
 	return execTmux("attach-session", "-t", sessionName)
 }
 
-// CreateSession creates a new tmux session and attaches to it.
-// If already inside tmux, creates the session detached and then switches to it.
+// CreateSession prepares a tmux session without attaching.
+// Returns LaunchActionCreate when a new session was created, or
+// LaunchActionAttachExisting when a matching session already exists.
 func CreateSession(sessionName, workingDir string) (LaunchAction, error) {
-	insideTmux := os.Getenv("TMUX") != ""
 	if err := newDetachedSession(sessionName, workingDir); err != nil {
 		var dupErr *duplicateSessionError
 		if errors.As(err, &dupErr) {
@@ -48,9 +48,6 @@ func CreateSession(sessionName, workingDir string) (LaunchAction, error) {
 			if !matching {
 				return "", err
 			}
-			if err := AttachToSession(sessionName); err != nil {
-				return "", err
-			}
 			return LaunchActionAttachExisting, nil
 		}
 		return "", err
@@ -58,10 +55,7 @@ func CreateSession(sessionName, workingDir string) (LaunchAction, error) {
 
 	configureSession(sessionName)
 	createDefaultWindows(sessionName, workingDir)
-	if insideTmux {
-		return LaunchActionCreate, execTmux("switch-client", "-t", sessionName)
-	}
-	return LaunchActionCreate, execTmux("attach-session", "-t", sessionName)
+	return LaunchActionCreate, nil
 }
 
 // execTmux replaces the current process with tmux.
