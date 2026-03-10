@@ -1,0 +1,7 @@
+- [x] Extract shared selector loop + key constants
+- [x] Make history list width-aware and less noisy (truncate + align)
+- [x] Centralize user-facing strings
+- [x] Improve error formatting (friendly + debug mode)
+- [x] Add unit tests for formatting/filtering
+- [x] Run `go test ./...`
+- [ ] Run `make lint` (known to SIGKILL on this host)

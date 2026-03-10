@@ -1,5 +1,5 @@
 {
-  "lastSequence": 12,
+  "lastSequence": 14,
   "entries": [
     {
       "number": 1,
@@ -62,6 +62,22 @@
       "file": "doc/decisions/012-separate-session-create-from-attach.md",
       "branches": [
         "fix/p-log-empty-history"
+      ]
+    },
+    {
+      "number": 13,
+      "title": "Shared selector engine for terminal UI",
+      "file": "doc/decisions/013-shared-selector-engine.md",
+      "branches": [
+        "refactor/p-log-history-ui"
+      ]
+    },
+    {
+      "number": 14,
+      "title": "Friendly errors with opt-in debug detail",
+      "file": "doc/decisions/014-friendly-errors-with-debug-mode.md",
+      "branches": [
+        "refactor/p-log-history-ui"
       ]
     }
   ]

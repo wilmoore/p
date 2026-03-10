@@ -30,3 +30,5 @@ We use the [Michael Nygard format](https://cognitect.com/blog/2011/11/15/documen
 - [010. Apply Global Window Style for Consistent Backgrounds](010-global-window-style.md)
 - [011. Session History Ledger and Duplicate Attach](011-session-history-ledger.md)
 - [012. Separate Session Create from Attach](012-separate-session-create-from-attach.md)
+- [013. Shared Selector Engine for Terminal UI](013-shared-selector-engine.md)
+- [014. Friendly Errors with Opt-in Debug Detail](014-friendly-errors-with-debug-mode.md)

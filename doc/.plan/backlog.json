@@ -1,0 +1,29 @@
+{
+  "lastSequence": 2,
+  "items": [
+    {
+      "id": 1,
+      "title": "Refactor history selector UI and error messaging",
+      "description": "Reduce duplicated terminal selector logic, replace magic numbers/strings with named constants, and improve `p --log` rendering and error messages while keeping debug detail available.",
+      "category": "debt",
+      "severity": "medium",
+      "fingerprint": "debt|1|refactor-history-selector-ui",
+      "source": "/pro:refactor",
+      "sourceBranch": "refactor/p-log-history-ui",
+      "createdAt": "2026-03-10T12:40:00Z",
+      "status": "in-progress"
+    },
+    {
+      "id": 2,
+      "title": "make lint killed on this host",
+      "description": "`make lint` is killed with SIGKILL (exit 9) on this host. Investigate resource usage or adjust Makefile/lint invocation so `make lint` is reliable.",
+      "category": "bug",
+      "severity": "medium",
+      "fingerprint": "bug|2|make-lint-killed-on-host",
+      "source": "/pro:pr",
+      "sourceBranch": "refactor/p-log-history-ui",
+      "createdAt": "2026-03-10T12:45:00Z",
+      "status": "open"
+    }
+  ]
+}
