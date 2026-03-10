@@ -8,7 +8,9 @@ import (
 	"strings"
 	"time"
 
+	"github.com/wilmoore/p/internal/clierr"
 	"github.com/wilmoore/p/internal/history"
+	"github.com/wilmoore/p/internal/i18n"
 	"github.com/wilmoore/p/internal/tmux"
 	"github.com/wilmoore/p/internal/ui"
 )
@@ -42,7 +44,7 @@ Examples:
 
 func main() {
 	if err := run(); err != nil {
-		fmt.Fprintf(os.Stderr, "%s\n", err)
+		fmt.Fprintln(os.Stderr, clierr.Format(err))
 		os.Exit(1)
 	}
 }
@@ -78,7 +80,7 @@ func showSessionSelector() error {
 	}
 
 	if len(sessions) == 0 {
-		return fmt.Errorf("no tmux sessions available")
+		return fmt.Errorf(i18n.ErrNoTmuxSessionsAvailable)
 	}
 
 	choice, err := ui.ShowSelector(sessions)
@@ -97,7 +99,7 @@ func showHistory() error {
 		return err
 	}
 	if len(entries) == 0 {
-		fmt.Println("No session history yet.")
+		fmt.Println(i18n.MsgNoSessionHistoryYet)
 		return nil
 	}
 	choice, err := ui.ShowHistory(entries)
@@ -108,7 +110,7 @@ func showHistory() error {
 		return nil
 	}
 	if choice.TargetDir == "" {
-		return fmt.Errorf("history entry is missing target directory")
+		return fmt.Errorf(i18n.ErrHistoryMissingTargetDir)
 	}
 	return createSessionFromPath(choice.TargetDir, choice.SessionName)
 }
@@ -204,7 +206,7 @@ func logLaunch(action history.Action, sessionName, targetDir string) {
 		TargetDir:   targetDir,
 	}
 	if err := history.Append(entry); err != nil {
-		fmt.Fprintf(os.Stderr, "warning: failed to write history: %v\n", err)
+		fmt.Fprintf(os.Stderr, i18n.WarnWriteHistoryFailedFmt, err)
 	}
 }
 
