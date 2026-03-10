@@ -4,15 +4,16 @@
     {
       "id": "session-2026-03-05T15-13-35-847Z-c97f8d0f",
       "filename": "session-2026-03-05T15-13-35-847Z-c97f8d0f.md",
-      "relativePath": "sessions/session-2026-03-05T15-13-35-847Z-c97f8d0f.md",
-      "status": "pending",
+      "relativePath": "archive/session-2026-03-05T15-13-35-847Z-c97f8d0f.md",
+      "status": "acked",
       "createdAt": "2026-03-05T15:13:35.847Z",
-      "updatedAt": "2026-03-05T15:13:35.847Z",
+      "updatedAt": "2026-03-10T12:37:57.019Z",
       "trigger": "plugin.initialize",
       "branch": "fix/p-log-empty-history",
       "workingTree": "dirty",
       "recentCommit": "4bc0eda Merge pull request #16 from wilmoore/feat/session-enhancements",
-      "backlogSummary": "- In-progress items: unknown (no readable backlog)"
+      "backlogSummary": "- In-progress items: unknown (no readable backlog)",
+      "note": "merged in #17"
     }
   ]
 }

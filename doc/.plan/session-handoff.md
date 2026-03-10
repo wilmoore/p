@@ -1,17 +1,15 @@
 # Session Handoff Ledger
 
-Updated: 2026-03-05T15:13:35.977Z
-Current session: session-2026-03-05T15-13-35-847Z-c97f8d0f
+Updated: 2026-03-10T12:37:57.023Z
+Current session: 
 
-## Outstanding Snapshots (1)
+## Outstanding Snapshots (0)
 
-1. [pending] session-2026-03-05T15-13-35-847Z-c97f8d0f — fix/p-log-empty-history (dirty)
-   File: doc/.plan/session-handoff/sessions/session-2026-03-05T15-13-35-847Z-c97f8d0f.md
-   Updated: 2026-03-05T15:13:35.847Z
+- None
 
 ## Recent Activity
 
-- None
+- acked: session-2026-03-05T15-13-35-847Z-c97f8d0f — merged in #17
 
 ## Commands
 
